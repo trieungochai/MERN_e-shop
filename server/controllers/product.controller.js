@@ -30,4 +30,19 @@ const createProduct = async (req, res) => {
   }
 };
 
-module.exports = { createProduct };
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+module.exports = { createProduct, getAllProducts };
