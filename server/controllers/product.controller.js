@@ -14,7 +14,7 @@ const createProduct = async (req, res) => {
     const newProduct = await Product.create({
       name,
       image,
-      countInStock: countInStock || 1,
+      countInStock,
     });
 
     return res.status(StatusCodes.CREATED).json({
