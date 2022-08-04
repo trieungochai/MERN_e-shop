@@ -12,6 +12,7 @@ const connectDB = require("./db/connect");
 
 // routers
 const productRouter = require("./routers/product.router");
+const categoryRouter = require("./routers/category.router");
 
 // middleware
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(morgan("tiny"));
 
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/categories", categoryRouter);
 
 const PORT = process.env.PORT || 3000;
 const start = async () => {

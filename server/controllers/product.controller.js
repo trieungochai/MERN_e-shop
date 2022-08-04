@@ -33,7 +33,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({});
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       success: true,
       products,
     });
