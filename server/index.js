@@ -5,14 +5,18 @@ const app = express();
 
 // rest of packages
 const morgan = require("morgan");
+const cors = require("cors");
 
 // database
 const connectDB = require("./db/connect");
 
-// routes
-const productRouter = require("./routes/product.router");
+// routers
+const productRouter = require("./routers/product.router");
 
 // middleware
+app.use(cors());
+app.options("*", cors());
+
 app.use(express.json());
 app.use(morgan("tiny"));
 
