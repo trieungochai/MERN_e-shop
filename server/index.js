@@ -5,18 +5,22 @@ const app = express();
 
 // rest of packages
 const morgan = require("morgan");
+const cors = require("cors");
 
 // database
 const connectDB = require("./db/connect");
 
+// routers
+const productRouter = require("./routers/product.router");
+
 // middleware
+app.use(cors());
+app.options("*", cors());
+
 app.use(express.json());
 app.use(morgan("tiny"));
 
-// routes
-app.get("/", (req, res) => {
-  return res.send("See you space cowboy");
-});
+app.use("/api/v1/products", productRouter);
 
 const PORT = process.env.PORT || 3000;
 const start = async () => {

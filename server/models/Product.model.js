@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
   countInStock: {
     type: Number,
     required: [true, "Product quantity is required"],
-  }
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);
