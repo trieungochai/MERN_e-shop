@@ -11,21 +11,21 @@ const createProduct = async (req, res) => {
     // images,
     brand,
     price,
-    categoryId,
+    category,
     countInStock,
     rating,
     numReviews,
     isFeatured,
     // createdDate,
   } = req.body;
-  if (!name || !description || !price || !categoryId) {
+  if (!name || !description || !price || !category) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
       message: "Please provide a value for the required field",
     });
   }
 
-  const categoryAlreadyExists = await Category.findById(categoryId);
+  const categoryAlreadyExists = await Category.findById(category);
   if (!categoryAlreadyExists) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -40,7 +40,7 @@ const createProduct = async (req, res) => {
       image,
       brand,
       price,
-      categoryId,
+      category,
       countInStock,
       rating,
       numReviews,
@@ -62,7 +62,7 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).populate("category");
     return res.status(StatusCodes.OK).json({
       success: true,
       products,
@@ -86,7 +86,7 @@ const getSingleProduct = async (req, res) => {
   }
 
   try {
-    const product = await Product.findById({ _id: id }).select("name image -_id");
+    const product = await Product.findById({ _id: id }).populate("category");
     return res.status(StatusCodes.OK).json({ success: true, product });
   } catch (error) {
     console.log(error.message);
