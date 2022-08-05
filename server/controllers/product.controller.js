@@ -1,20 +1,50 @@
 const Product = require("../models/Product.model");
+const Category = require("../models/Category.model");
 const { StatusCodes } = require("http-status-codes");
 
 const createProduct = async (req, res) => {
-  const { name, image, countInStock } = req.body;
-  if (!name || !image) {
+  const {
+    name,
+    description,
+    richDescription,
+    image,
+    // images,
+    brand,
+    price,
+    categoryId,
+    countInStock,
+    rating,
+    numReviews,
+    isFeatured,
+    // createdDate,
+  } = req.body;
+  if (!name || !description || !price || !categoryId) {
     return res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
       message: "Please provide a value for the required field",
     });
   }
 
+  const categoryAlreadyExists = await Category.findById(categoryId);
+  if (!categoryAlreadyExists) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, message: "Invalid Category" });
+  }
+
   try {
     const newProduct = await Product.create({
       name,
+      description,
+      richDescription,
       image,
+      brand,
+      price,
+      categoryId,
       countInStock,
+      rating,
+      numReviews,
+      isFeatured,
     });
 
     return res.status(StatusCodes.CREATED).json({

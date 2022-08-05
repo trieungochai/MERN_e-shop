@@ -31,7 +31,7 @@ const productSchema = new mongoose.Schema({
     required: [true, "Price is required"],
     default: 0,
   },
-  category: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
     required: [true, "Category is required"],
@@ -40,7 +40,7 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Quantity is required"],
     min: 0,
-    min: 255,
+    max: 255,
   },
   rating: {
     type: Number,
