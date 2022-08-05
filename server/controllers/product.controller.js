@@ -75,4 +75,25 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getAllProducts };
+const getSingleProduct = async (req, res) => {
+  const { id } = req.params;
+  const idAlreadyExists = await Product.findOne({ _id: id });
+  if (!idAlreadyExists) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: `No Category was found for the given ID: ${id}`,
+    });
+  }
+
+  try {
+    const product = await Product.findById({ _id: id }).select("name image -_id");
+    return res.status(StatusCodes.OK).json({ success: true, product });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+module.exports = { createProduct, getAllProducts, getSingleProduct };
