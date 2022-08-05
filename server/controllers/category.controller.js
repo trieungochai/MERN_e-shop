@@ -39,13 +39,37 @@ const getAllCategories = async (req, res) => {
   }
 };
 
+const getSingleCategory = async (req, res) => {
+  const { id } = req.params;
+  const idAlreadyExists = await Category.findOne({ _id: id });
+  if (!idAlreadyExists) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: `No Category was found for the given ID: ${id}`,
+    });
+  }
+
+  try {
+    const category = await Category.findById({ _id: id });
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      category,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 const deleteCategory = async (req, res) => {
   const { id } = req.params;
   const idAlreadyExists = await Category.findOne({ _id: id });
   if (!idAlreadyExists) {
     return res.status(StatusCodes.NOT_FOUND).json({
       success: false,
-      message: `id: ${id} specified in the request does not match`,
+      message: `No Category was found for the given ID: ${id}`,
     });
   }
 
@@ -64,4 +88,9 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-module.exports = { createCategory, getAllCategories, deleteCategory };
+module.exports = {
+  createCategory,
+  getAllCategories,
+  getSingleCategory,
+  deleteCategory,
+};
