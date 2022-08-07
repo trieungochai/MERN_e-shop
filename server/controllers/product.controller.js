@@ -163,9 +163,33 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const idAlreadyExists = await Product.findOne({ _id: id });
+  if (!idAlreadyExists) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: `No Category was found for the given ID: ${id}`,
+    });
+  }
+
+  try {
+    const deletedProduct = await Product.findByIdAndRemove({ _id: id });
+    return res
+      .status(StatusCodes.OK)
+      .json({ success: true, message: "Deleted successfully", deletedProduct });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateProduct,
+  deleteProduct,
 };
