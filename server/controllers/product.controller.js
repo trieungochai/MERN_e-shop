@@ -96,4 +96,76 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getAllProducts, getSingleProduct };
+const updateProduct = async (req, res) => {
+  const {
+    params: { id },
+    body: {
+      name,
+      description,
+      richDescription,
+      image,
+      brand,
+      price,
+      category,
+      countInStock,
+      rating,
+      numReviews,
+      isFeatured,
+    },
+  } = req;
+  const idAlreadyExists = await Product.findOne({ _id: id });
+  if (!idAlreadyExists) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: `No Category was found for the given ID: ${id}`,
+    });
+  }
+  if (!name || !description || !price || !category) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      success: false,
+      message: "Please provide a value for the required field",
+    });
+  }
+  const categoryAlreadyExists = await Category.findById(category);
+  if (!categoryAlreadyExists) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, message: "Invalid Category" });
+  }
+
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      { _id: id },
+      {
+        name,
+        description,
+        richDescription,
+        image,
+        brand,
+        price,
+        category,
+        countInStock,
+        rating,
+        numReviews,
+        isFeatured,
+      },
+      { new: true, runValidators: true }
+    );
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ success: true, message: "Updated successfully", updatedProduct });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getSingleProduct,
+  updateProduct,
+};
