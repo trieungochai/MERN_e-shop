@@ -213,6 +213,31 @@ const getFeaturedProducts = async (req, res) => {
   }
 };
 
+const getProductsByCategories = async (req, res) => {
+  // {{URL}}/products?categories=123,345
+  // const { categories } = req.query;
+  // let filteredCategories = {};
+  // if (categories) {
+  //   filteredCategories = { category: categories.split(",") };
+  // }
+
+  const categories = req.query.categories
+    ? { category: {} }
+    : { category: categories.split(",") };
+
+  try {
+    const filteredProducts = await Product.find(categories).populate(
+      "category"
+    );
+    return res.status(StatusCodes.OK).json({ success: true, filteredProducts });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -221,4 +246,5 @@ module.exports = {
   deleteProduct,
   getProductCount,
   getFeaturedProducts,
+  getProductsByCategories,
 };
