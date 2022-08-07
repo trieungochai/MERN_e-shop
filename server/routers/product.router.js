@@ -5,13 +5,15 @@ const {
   getSingleProduct,
   updateProduct,
   deleteProduct,
-  countProducts,
+  getProductCount,
+  getFeaturedProducts,
 } = require("../controllers/product.controller");
 
 const productRouter = express.Router();
 
 productRouter.route("/").post(createProduct).get(getAllProducts);
-productRouter.route("/getCount").get(countProducts);
+productRouter.route("/get/count").get(getProductCount);
+productRouter.route("/get/featured/:limit").get(getFeaturedProducts);
 productRouter
   .route("/:id")
   .get(getSingleProduct)

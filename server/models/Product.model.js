@@ -51,6 +51,7 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   isFeatured: {
+    // display in the homepage or not
     type: Boolean,
     default: false,
   },

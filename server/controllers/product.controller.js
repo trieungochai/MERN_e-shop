@@ -186,10 +186,25 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-const countProducts = async (req, res) => {
+const getProductCount = async (req, res) => {
   try {
     const numberOfProducts = await Product.countDocuments({});
     return res.status(StatusCodes.OK).json({ success: true, numberOfProducts });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+const getFeaturedProducts = async (req, res) => {
+  try {
+    const limit = req.params.limit ? req.params.limit : 0;
+    const featuredProduct = await Product.find({ isFeatured: true }).limit(
+      +limit
+    );
+    return res.status(StatusCodes.OK).json({ success: true, featuredProduct });
   } catch (error) {
     console.log(error.message);
     return res
@@ -204,5 +219,6 @@ module.exports = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
-  countProducts,
+  getProductCount,
+  getFeaturedProducts,
 };
