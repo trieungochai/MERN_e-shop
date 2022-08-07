@@ -186,10 +186,23 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const countProducts = async (req, res) => {
+  try {
+    const numberOfProducts = await Product.countDocuments({});
+    return res.status(StatusCodes.OK).json({ success: true, numberOfProducts });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  countProducts,
 };
